@@ -111,5 +111,4 @@ public class Console {
         var nrCom = comunitati.mostSociableCommunity();
         nrCom.forEach(System.out::println);
     }
-
 }
