@@ -3,6 +3,7 @@ package repository;
 import domain.Prietenie;
 import domain.Utilizator;
 import domain.validators.Validator;
+import repository.database.UserDB;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,9 +11,9 @@ import java.util.Optional;
 
 public class PrietenieRepository extends AbstractFileRepository<Long, Prietenie>{
 
-    private final InMemoryRepository<Long, Utilizator> repoUser;
+    private final UserDB repoUser;
 
-    public PrietenieRepository(Validator<Prietenie> validator, String fileName, InMemoryRepository<Long, Utilizator> repoUser) {
+    public PrietenieRepository(Validator<Prietenie> validator, String fileName, UserDB repoUser) {
         super(validator);
         this.filename = fileName;
         this.repoUser = repoUser;
