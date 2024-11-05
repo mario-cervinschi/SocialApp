@@ -1,4 +1,4 @@
-package repository;
+package repository.file;
 
 import domain.Prietenie;
 import domain.Utilizator;

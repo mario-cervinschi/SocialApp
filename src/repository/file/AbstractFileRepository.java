@@ -1,14 +1,15 @@
-package repository;
+package repository.file;
 
 import domain.Entity;
 import domain.validators.Validator;
+import repository.InMemoryRepository;
 
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractFileRepository<ID, E extends Entity<ID>> extends InMemoryRepository<ID, E>{
+public abstract class AbstractFileRepository<ID, E extends Entity<ID>> extends InMemoryRepository<ID, E> {
     protected String filename;
 
     public AbstractFileRepository(Validator<E> validator) {

@@ -2,17 +2,18 @@ package service;
 
 import domain.Prietenie;
 import domain.Utilizator;
-import repository.InMemoryRepository;
+import repository.database.FriendshipDB;
+import repository.database.UserDB;
 
 import java.util.Objects;
 import java.util.Optional;
 
 public class SocialService {
 
-    private final InMemoryRepository<Long, Utilizator> repositoryUser;
-    private final InMemoryRepository<Long, Prietenie> repositoryFriendship;
+    private final UserDB repositoryUser;
+    private final FriendshipDB repositoryFriendship;
 
-    public SocialService(InMemoryRepository<Long, Utilizator> repositoryUser, InMemoryRepository<Long, Prietenie> repositoryFriendship) {
+    public SocialService(UserDB repositoryUser, FriendshipDB repositoryFriendship) {
         this.repositoryUser = repositoryUser;
         this.repositoryFriendship = repositoryFriendship;
     }

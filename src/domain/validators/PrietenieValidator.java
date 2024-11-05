@@ -1,14 +1,13 @@
 package domain.validators;
 
 import domain.Prietenie;
-import domain.Utilizator;
-import repository.InMemoryRepository;
+import repository.database.UserDB;
 
 public class PrietenieValidator implements Validator<Prietenie> {
 
-    private final InMemoryRepository<Long, Utilizator> repository;
+    private final UserDB repository;
 
-    public PrietenieValidator(InMemoryRepository<Long, Utilizator> repository) {
+    public PrietenieValidator(UserDB repository) {
         this.repository = repository;
     }
 
