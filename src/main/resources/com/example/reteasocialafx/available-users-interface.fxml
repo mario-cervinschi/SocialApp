@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.Scene?>
+
+<VBox xmlns="http://javafx.com/javafx/21.0.5" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.reteasocialafx.UserListController" spacing="10">
+    <children>
+        <TableView fx:id="tableUsers">
+            <columns>
+                <TableColumn fx:id="columnFirstName" text="First Name" />
+                <TableColumn fx:id="columnLastName" text="Last Name" />
+            </columns>
+        </TableView>
+
+        <Button fx:id="btnAddFollowing" text="Add Following" onAction="#handleAddFollowing" />
+    </children>
+</VBox>

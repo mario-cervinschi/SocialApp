@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21.0.5" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.reteasocialafx.RequestsController">
+    <children>
+        <AnchorPane prefHeight="520.0" prefWidth="660.0" >
+            <children>
+                <SplitPane orientation="VERTICAL" prefHeight="329.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30">
+                    <items>
+                        <VBox alignment="TOP_CENTER">
+                            <children>
+                                <Label text="Followers" />
+                                <ListView fx:id="tableIncoming" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="TOP_CENTER">
+                            <children>
+                                <Label text="Following" />
+                                <ListView fx:id="tableOutgoing" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                            </children>
+                        </VBox>
+
+                    </items>
+                </SplitPane>
+            </children>
+
+        </AnchorPane>
+
+        <AnchorPane>
+            <children>
+                <HBox spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0">
+                    <Button fx:id="btnDelete" text="Delete" onAction="#handleDeleteRequest"/>
+                    <Button fx:id="btnDecline" text="Decline" onAction="#handleDeclineRequest"/>
+                </HBox>
+                <HBox spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                    <Button fx:id="btnAccept" text="Accept" onAction="#handleAcceptRequest" />
+                    <Button fx:id="btnBack" text="Back" onAction="#handleBack"/>
+                </HBox>
+            </children>
+        </AnchorPane>
+
+    </children>
+
+</VBox>

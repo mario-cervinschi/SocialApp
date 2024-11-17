@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.reteasocialafx.LogInController"
+            prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <Label layoutY="170.0" text="Email" AnchorPane.leftAnchor="230.0" />
+        <Label layoutY="220.0" text="Password" AnchorPane.leftAnchor="230.0" />
+        <Button layoutY="280.0" fx:id="btnLogIn" mnemonicParsing="false" onAction="#onLogInButtonCLick" prefHeight="25.0" prefWidth="110.0" text="Log In" textAlignment="CENTER" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0"/>
+        <TextField layoutY="190" fx:id="email" onKeyTyped="#onTextChanged" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0"/>
+        <PasswordField layoutY="240" fx:id="password" onKeyTyped="#onPasswordChanged" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0"/>
+
+        <Label layoutX="258" layoutY="320" text="Don't have an account?" />
+        <Button layoutY="335.0" fx:id="btnSignUp" mnemonicParsing="false" onAction="#onSignUpButtonCLick" prefHeight="20.0" prefWidth="110.0" text="Sign Up" textAlignment="CENTER" AnchorPane.leftAnchor="270.0" AnchorPane.rightAnchor="270.0"/>
+    </children>
+
+</AnchorPane>
