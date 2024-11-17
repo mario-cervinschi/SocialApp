@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21.0.5" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.reteasocialafx.RequestsController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21.0.5" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.reteasocialafx.controller.RequestsController">
     <children>
         <AnchorPane prefHeight="520.0" prefWidth="660.0" >
             <children>

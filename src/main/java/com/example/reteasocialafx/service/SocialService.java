@@ -1,6 +1,7 @@
 package com.example.reteasocialafx.service;
 
 
+import com.example.reteasocialafx.domain.FriendRequest;
 import com.example.reteasocialafx.domain.Prietenie;
 import com.example.reteasocialafx.domain.Utilizator;
 import com.example.reteasocialafx.repository.database.FriendshipDB;
@@ -52,20 +53,6 @@ public class SocialService {
         for(var friendship : getFriendships()) {
             if(friendship.getIdUser1().equals(userId) && "ACCEPTED".equals(friendship.getFriendRequest().name())) {
                 friends.add(getUser(friendship.getIdUser2()));
-            }
-        }
-        return friends;
-    }
-
-    public ArrayList<Optional<Utilizator>> getFriends(long userId) {
-        ArrayList<Optional<Utilizator>> friends = new ArrayList<>();
-        for(var friendship : getFriendships()) {
-            if(friendship.getIdUser1().equals(userId)) {
-                for(var friendship2 : getFriendships()) {
-                    if(friendship2.getIdUser2().equals(userId) && friendship.getIdUser2().equals(friendship2.getIdUser1())) {
-                        friends.add(getUser(friendship.getIdUser2()));
-                    }
-                }
             }
         }
         return friends;
@@ -127,13 +114,11 @@ public class SocialService {
 
         if(friendships != null){
             for(var u : friendships){
-                if(Objects.equals(u.getIdUser1(), prietenie.getIdUser1()) && Objects.equals(u.getIdUser2(), prietenie.getIdUser2())){
+                if(Objects.equals(u.getIdUser1(), prietenie.getIdUser1()) && Objects.equals(u.getIdUser2(), prietenie.getIdUser2()) && !u.getFriendRequest().equals(FriendRequest.DECLINED)){
                     throw new IllegalArgumentException("Prietenie already exists");
                 }
             }
         }
-
-
 
         if(repositoryUser.findOne(prietenie.getIdUser1()).isEmpty() || repositoryUser.findOne(prietenie.getIdUser2()).isEmpty()) {
             throw new IllegalArgumentException("Prietenie not found");

@@ -4,9 +4,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.Scene?>
 
-<VBox xmlns="http://javafx.com/javafx/21.0.5" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.reteasocialafx.UserListController" spacing="10">
+<VBox xmlns="http://javafx.com/javafx/21.0.5" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.reteasocialafx.controller.UserListController" spacing="10">
     <children>
         <TableView fx:id="tableUsers">
             <columns>

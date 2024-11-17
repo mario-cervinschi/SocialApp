@@ -1,4 +1,4 @@
-package com.example.reteasocialafx;
+package com.example.reteasocialafx.controller;
 
 import com.example.reteasocialafx.domain.FriendRequest;
 import com.example.reteasocialafx.domain.Prietenie;
@@ -13,11 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -25,8 +21,6 @@ import java.net.URL;
 import java.util.*;
 
 public class RequestsController implements Initializable {
-
-   
 
     private final ObservableList<String> incomingRequests = FXCollections.observableArrayList();
     private final ObservableList<String> outgoingRequests = FXCollections.observableArrayList();

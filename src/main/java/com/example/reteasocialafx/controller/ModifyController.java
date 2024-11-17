@@ -1,7 +1,6 @@
-package com.example.reteasocialafx;
+package com.example.reteasocialafx.controller;
 
 import com.example.reteasocialafx.domain.Utilizator;
-import com.example.reteasocialafx.domain.validators.ValidationException;
 import com.example.reteasocialafx.service.SocialService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import jdk.jshell.execution.Util;
 
 import java.io.IOException;
 
@@ -51,7 +49,6 @@ public class ModifyController {
     public Button btnModify;
 
     public void onModifyButtonClick(ActionEvent actionEvent) throws IOException {
-
         if(!firstName.getText().isEmpty() || !lastName.getText().isEmpty()) {
             if(currentPassword.getText().equals(utilizator.getPassword())) {
                 if(newPassword.getText().equals(confirmNewPassword.getText())) {
@@ -69,8 +66,8 @@ public class ModifyController {
 
                     stage.show();
                 }
-            }else{
-
+            }
+            else{
                 Utilizator newUser = new Utilizator(firstName.getText(), lastName.getText(), utilizator.getEmail(), utilizator.getPassword());
                 newUser.setId(utilizator.getId());
                 socialService.modifyUser(newUser);
@@ -87,8 +84,7 @@ public class ModifyController {
                 stage.show();
             }
         }
-        else
-            if(currentPassword.getText().equals(utilizator.getPassword())) {
+        else if(currentPassword.getText().equals(utilizator.getPassword())) {
                 if (newPassword.getText().equals(confirmNewPassword.getText())) {
                     Utilizator newUser = new Utilizator(utilizator.getFirstName(), utilizator.getLastName(), utilizator.getEmail(), newPassword.getText());
                     newUser.setId(utilizator.getId());

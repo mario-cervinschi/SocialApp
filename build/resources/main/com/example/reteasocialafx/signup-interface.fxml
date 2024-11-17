@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.reteasocialafx.SignUpController"
+            fx:controller="com.example.reteasocialafx.controller.SignUpController"
             prefHeight="400.0" prefWidth="600.0">
     <children>
         <Label layoutY="80.0" text="First Name" AnchorPane.leftAnchor="230.0" />

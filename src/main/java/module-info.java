@@ -7,4 +7,6 @@ module com.example.reteasocialafx {
 
     opens com.example.reteasocialafx to javafx.fxml;
     exports com.example.reteasocialafx;
+    exports com.example.reteasocialafx.controller;
+    opens com.example.reteasocialafx.controller to javafx.fxml;
 }

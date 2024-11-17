@@ -1,5 +1,6 @@
 package com.example.reteasocialafx;
 
+import com.example.reteasocialafx.controller.LogInController;
 import com.example.reteasocialafx.domain.validators.PrietenieValidator;
 import com.example.reteasocialafx.domain.validators.UtilizatorValidator;
 import com.example.reteasocialafx.repository.database.FriendshipDB;

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.SplitPane?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21.0.5" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.reteasocialafx.UserController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21.0.5" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.reteasocialafx.controller.UserController">
     <children>
         <HBox alignment="CENTER" spacing="20.0">
             <children>

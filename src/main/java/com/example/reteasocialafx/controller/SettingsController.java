@@ -1,4 +1,4 @@
-package com.example.reteasocialafx;
+package com.example.reteasocialafx.controller;
 
 import com.example.reteasocialafx.domain.Utilizator;
 import com.example.reteasocialafx.service.SocialService;

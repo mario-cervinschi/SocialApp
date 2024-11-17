@@ -1,4 +1,4 @@
-package com.example.reteasocialafx;
+package com.example.reteasocialafx.controller;
 
 import com.example.reteasocialafx.domain.Utilizator;
 import com.example.reteasocialafx.domain.validators.UtilizatorValidator;
@@ -43,21 +43,6 @@ public class SignUpController {
         return socialService;
     }
 
-    @FXML
-    public void onFirstNameChanged(KeyEvent keyEvent) {
-    }
-    @FXML
-    public void onLastNameChanged(KeyEvent keyEvent) {
-    }
-    @FXML
-    public void onEmailChanged(KeyEvent keyEvent) {
-    }
-    @FXML
-    public void onPasswordChanged(KeyEvent keyEvent) {
-    }
-    @FXML
-    public void onConfirmPasswordChanged(KeyEvent keyEvent) {
-    }
     @FXML
     public void onSignUpButtonCLick(ActionEvent actionEvent) throws IOException {
 

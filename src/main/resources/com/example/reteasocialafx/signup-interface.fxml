@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.text.Text?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.reteasocialafx.SignUpController"
+            fx:controller="com.example.reteasocialafx.controller.SignUpController"
             prefHeight="400.0" prefWidth="600.0">
     <children>
         <Label layoutY="80.0" text="First Name" AnchorPane.leftAnchor="230.0" />
@@ -17,11 +13,11 @@
         <Label layoutY="180.0" text="Email" AnchorPane.leftAnchor="230.0" />
         <Label layoutY="230.0" text="Password" AnchorPane.leftAnchor="230.0" />
         <Label layoutY="280.0" text="Retype Password" AnchorPane.leftAnchor="230.0" />
-        <TextField layoutY="100" fx:id="firstName" onKeyTyped="#onFirstNameChanged" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0"/>
-        <TextField layoutY="150" fx:id="lastName" onKeyTyped="#onLastNameChanged" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0"/>
-        <TextField layoutY="200" fx:id="email" onKeyTyped="#onEmailChanged" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0"/>
-        <TextField layoutY="250" fx:id="password" onKeyTyped="#onPasswordChanged" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0"/>
-        <TextField layoutY="300" fx:id="confirmPassword" onKeyTyped="#onConfirmPasswordChanged" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0"/>
+        <TextField layoutY="100" fx:id="firstName" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0"/>
+        <TextField layoutY="150" fx:id="lastName" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0"/>
+        <TextField layoutY="200" fx:id="email" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0"/>
+        <TextField layoutY="250" fx:id="password" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0"/>
+        <TextField layoutY="300" fx:id="confirmPassword" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0"/>
         <Button layoutY="330.0" fx:id="btnSignUp" mnemonicParsing="false" onAction="#onSignUpButtonCLick" prefHeight="25.0" prefWidth="110.0" text="Sign Up" textAlignment="CENTER" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0"/>
     </children>
 

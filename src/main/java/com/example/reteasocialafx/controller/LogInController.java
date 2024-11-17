@@ -1,4 +1,4 @@
-package com.example.reteasocialafx;
+package com.example.reteasocialafx.controller;
 
 import com.example.reteasocialafx.domain.Utilizator;
 import com.example.reteasocialafx.service.SocialService;
@@ -44,7 +44,6 @@ public class LogInController {
             throw new IllegalArgumentException("");
         }
         else{
-
             FXMLLoader stageLoader = new FXMLLoader(getClass().getResource("/com/example/reteasocialafx/main-interface.fxml"));
             Parent root = stageLoader.load();
 
@@ -57,15 +56,6 @@ public class LogInController {
 
             stage.show();
         }
-    }
-
-    @FXML
-    public void onTextChanged(KeyEvent keyEvent) {
-
-    }
-
-    @FXML
-    public void onPasswordChanged(KeyEvent keyEvent) {
     }
 
     @FXML

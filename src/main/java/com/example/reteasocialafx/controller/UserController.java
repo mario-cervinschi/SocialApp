@@ -1,5 +1,6 @@
-package com.example.reteasocialafx;
+package com.example.reteasocialafx.controller;
 
+import com.example.reteasocialafx.domain.FriendRequest;
 import com.example.reteasocialafx.domain.Utilizator;
 import com.example.reteasocialafx.service.SocialService;
 import javafx.collections.FXCollections;
@@ -22,6 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -106,7 +108,34 @@ public class UserController implements Initializable {
 
         UserListController userListController = loader.getController();
         userListController.setService(socialService);
-        userListController.setAllUsers(socialService.getUsers(), mainUser, followingObs);
+
+        var allUsers = socialService.getUsers();
+        List<Utilizator> newAllUsers = new ArrayList<>();
+
+        var allFollowing = socialService.getFollowing(mainUser.getId());
+
+        for(Utilizator utilizator : allUsers) {
+            if(!utilizator.equals(mainUser)) {
+                boolean test = false;
+                for(Optional<Utilizator> following : allFollowing){
+                    if(following.get().equals(utilizator)) {
+                        test = true;
+                    }
+                }
+                for(var prietenie : socialService.getFriendships()){
+                    if(prietenie.getIdUser1().equals(mainUser.getId()) && prietenie.getIdUser2().equals(utilizator.getId())) {
+                        if(prietenie.getFriendRequest().equals(FriendRequest.PENDING) || prietenie.getFriendRequest().equals(FriendRequest.ACCEPTED)) {
+                            test = true;
+                        }
+                    }
+                }
+                if(!test) {
+                    newAllUsers.add(utilizator);
+                }
+            }
+        }
+
+        userListController.setAllUsers(newAllUsers, mainUser);
 
         Stage newStage = new Stage();
         Scene scene = new Scene(userWindow);

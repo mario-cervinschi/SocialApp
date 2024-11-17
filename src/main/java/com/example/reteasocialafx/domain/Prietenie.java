@@ -44,10 +44,6 @@ public class Prietenie extends Entity<Long> {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
     public FriendRequest getFriendRequest() {
         return friendRequest;
     }
