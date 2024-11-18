@@ -22,7 +22,7 @@ public class UserListController implements Initializable {
 
     private SocialService service;
     private Utilizator currentUser;
-    private final ObservableList<Utilizator> allUsers = FXCollections.observableArrayList();
+    private ObservableList<Utilizator> allUsers = FXCollections.observableArrayList();
 
     public void setService(SocialService service) {
         this.service = service;
@@ -32,10 +32,11 @@ public class UserListController implements Initializable {
         return service;
     }
 
-    public void setAllUsers(Iterable<Utilizator> allUsers, Utilizator currentUser) {
-        allUsers.forEach(this.allUsers::add);
-
+    public void setAllUsers(ObservableList<Utilizator> allUsers, Utilizator currentUser) {
+        this.allUsers = allUsers;
         this.currentUser = currentUser;
+        tableUsers.setItems(this.allUsers);
+        tableUsers.refresh();
     }
 
     @FXML
@@ -51,8 +52,6 @@ public class UserListController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         columnFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         columnLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-
-        tableUsers.setItems(this.allUsers);
 
         btnAddFollowing.setDisable(true);
 

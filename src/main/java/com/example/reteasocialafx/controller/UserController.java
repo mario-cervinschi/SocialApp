@@ -37,6 +37,7 @@ public class UserController implements Initializable {
 
     private final ObservableList<Utilizator> followersObs = FXCollections.observableArrayList();
     private final ObservableList<Utilizator> followingObs = FXCollections.observableArrayList();
+    private final ObservableList<Utilizator> notSendRequestsObs = FXCollections.observableArrayList();
 
     @FXML
     public Button btnSeeUsers;
@@ -77,6 +78,35 @@ public class UserController implements Initializable {
         for (Optional<Utilizator> optionalFollowing : following) {
             optionalFollowing.ifPresent(followingObs::add);
         }
+
+        var allUsers = socialService.getUsers();
+        List<Utilizator> newAllUsers = new ArrayList<>();
+
+        var allFollowing = socialService.getFollowing(mainUser.getId());
+
+        for(Utilizator utilizator : allUsers) {
+            if(!utilizator.equals(mainUser)) {
+                boolean test = false;
+                for(Optional<Utilizator> followingg : allFollowing){
+                    if(followingg.get().equals(utilizator)) {
+                        test = true;
+                    }
+                }
+                for(var prietenie : socialService.getFriendships()){
+                    if(prietenie.getIdUser1().equals(mainUser.getId()) && prietenie.getIdUser2().equals(utilizator.getId())) {
+                        if(prietenie.getFriendRequest().equals(FriendRequest.PENDING) || prietenie.getFriendRequest().equals(FriendRequest.ACCEPTED)) {
+                            test = true;
+                        }
+                    }
+                }
+                if(!test) {
+                    newAllUsers.add(utilizator);
+                }
+            }
+        }
+
+        notSendRequestsObs.addAll(newAllUsers);
+
         setConnectedUser();
     }
 
@@ -106,38 +136,13 @@ public class UserController implements Initializable {
         UserListController userListController = loader.getController();
         userListController.setService(socialService);
 
-        var allUsers = socialService.getUsers();
-        List<Utilizator> newAllUsers = new ArrayList<>();
-
-        var allFollowing = socialService.getFollowing(mainUser.getId());
-
-        for(Utilizator utilizator : allUsers) {
-            if(!utilizator.equals(mainUser)) {
-                boolean test = false;
-                for(Optional<Utilizator> following : allFollowing){
-                    if(following.get().equals(utilizator)) {
-                        test = true;
-                    }
-                }
-                for(var prietenie : socialService.getFriendships()){
-                    if(prietenie.getIdUser1().equals(mainUser.getId()) && prietenie.getIdUser2().equals(utilizator.getId())) {
-                        if(prietenie.getFriendRequest().equals(FriendRequest.PENDING) || prietenie.getFriendRequest().equals(FriendRequest.ACCEPTED)) {
-                            test = true;
-                        }
-                    }
-                }
-                if(!test) {
-                    newAllUsers.add(utilizator);
-                }
-            }
-        }
-
-        userListController.setAllUsers(newAllUsers, mainUser);
 
         Stage newStage = new Stage();
         Scene scene = new Scene(userWindow);
         newStage.setScene(scene);
         newStage.setTitle("Available Users");
+        userListController.setAllUsers(notSendRequestsObs, mainUser);
+
         newStage.show();
 
     }
