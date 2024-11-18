@@ -11,14 +11,14 @@
                     <items>
                         <VBox alignment="TOP_CENTER">
                             <children>
-                                <Label text="Followers" />
+                                <Label text="INCOMING REQUESTS" />
                                 <ListView fx:id="tableIncoming" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
                             </children>
                         </VBox>
 
                         <VBox alignment="TOP_CENTER">
                             <children>
-                                <Label text="Following" />
+                                <Label text="OUTGOING REQUESTS" />
                                 <ListView fx:id="tableOutgoing" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
                             </children>
                         </VBox>

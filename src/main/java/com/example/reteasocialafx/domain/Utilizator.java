@@ -7,12 +7,10 @@ public class Utilizator extends Entity<Long>{
     private String lastName;
     private String email;
     private String password;
-    List<Utilizator> friends;
 
     public Utilizator(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
-        friends = new ArrayList<>();
         this.email = email;
     }
 
@@ -21,7 +19,6 @@ public class Utilizator extends Entity<Long>{
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        friends = new ArrayList<>();
     }
 
     public String getEmail() {
@@ -40,10 +37,6 @@ public class Utilizator extends Entity<Long>{
         this.password = password;
     }
 
-    public void setFriends(List<Utilizator> friends) {
-        this.friends = friends;
-    }
-
     public String getFirstName(){
         return firstName;
     }
@@ -60,24 +53,11 @@ public class Utilizator extends Entity<Long>{
         this.lastName = lName;
     }
 
-    public void addFriend(Utilizator friend){
-        friends.add(friend);
-    }
-
-    public void removeFriend(Utilizator friend){
-        friends.remove(friend);
-    }
-
-    public List<Utilizator> getFriends(){
-        return friends;
-    }
-
     @Override
     public String toString() {
         return "Utilizator{" +
                 "fName='" + firstName + '\'' +
                 ", lName='" + lastName + '\'' +
-                ", prieteni=" + friends +
                 '}';
     }
 
@@ -85,12 +65,13 @@ public class Utilizator extends Entity<Long>{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Utilizator that = (Utilizator) o;
-        return Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(friends, that.friends);
+        return Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(email, that.email) && Objects.equals(password, that.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, friends);
+        return Objects.hash(super.hashCode(), firstName, lastName, email, password);
     }
 }

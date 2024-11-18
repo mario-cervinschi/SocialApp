@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -52,12 +53,21 @@ public class SignUpController {
             validator.validate(newUser);
         }
         catch(ValidationException e){
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid/Missing required USER fields.");
+            alert.showAndWait();
             return;
         }
 
         if(!password.getText().equals(confirmPassword.getText())){
-            throw new IllegalArgumentException();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Passwords do not match.");
+            alert.showAndWait();
+            return;
         }
         else{
             socialService.addUtilizator(newUser);
@@ -74,5 +84,18 @@ public class SignUpController {
             stage.show();
         }
 
+    }
+
+    public void onBackButtonCLick(ActionEvent actionEvent) throws IOException {
+        FXMLLoader stageLoader = new FXMLLoader(getClass().getResource("/com/example/reteasocialafx/login-interface.fxml"));
+        Parent root = stageLoader.load();
+
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+
+        LogInController controller = stageLoader.getController();
+        controller.setSocialService(this.socialService);
+
+        stage.show();
     }
 }

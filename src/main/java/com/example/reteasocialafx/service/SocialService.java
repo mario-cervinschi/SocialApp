@@ -127,15 +127,6 @@ public class SocialService {
         prietenie.setId(getNewFriendshipID());
         repositoryFriendship.save(prietenie);
 
-        Optional<Utilizator> utilizator1 = repositoryUser.findOne(prietenie.getIdUser1());
-        Optional<Utilizator> utilizator2 = repositoryUser.findOne(prietenie.getIdUser2());
-        if(utilizator1.orElse(null) != null){
-            utilizator1.orElse(null).addFriend(utilizator2.orElse(null));
-        }
-        if(utilizator2.orElse(null) != null){
-            utilizator2.orElse(null).addFriend(utilizator1.orElse(null));
-        }
-
     }
 
     public void deletePrietenieByID(Long id){
@@ -158,14 +149,6 @@ public class SocialService {
         }
 
         repositoryFriendship.delete(id);
-        Optional<Utilizator> utilizator1 = repositoryUser.findOne(id1);
-        Optional<Utilizator> utilizator2 = repositoryUser.findOne(id2);
-        if(utilizator1.orElse(null) != null){
-            utilizator1.orElse(null).removeFriend(utilizator2.orElse(null));
-        }
-        if(utilizator2.orElse(null) != null){
-            utilizator2.orElse(null).removeFriend(utilizator1.orElse(null));
-        }
     }
 
     public Utilizator getUserByEmail(String email){

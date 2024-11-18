@@ -15,7 +15,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ModifyController {
-
+    @FXML
+    public Button btnBack;
     SocialService socialService;
     Utilizator utilizator;
 
@@ -103,4 +104,18 @@ public class ModifyController {
                 }
             }
         }
+
+    public void onBackButton(ActionEvent actionEvent) throws IOException {
+        FXMLLoader stageLoader = new FXMLLoader(getClass().getResource("/com/example/reteasocialafx/settings-interface.fxml"));
+        Parent root = stageLoader.load();
+
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+
+        SettingsController controller = stageLoader.getController();
+        controller.setSocialService(this.socialService);
+        controller.setCurrentUser(utilizator);
+
+        stage.show();
+    }
 }

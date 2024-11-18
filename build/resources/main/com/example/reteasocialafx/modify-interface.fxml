@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.text.Text?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.reteasocialafx.controller.ModifyController"
             prefHeight="400.0" prefWidth="600.0">
     <children>
+        <Button fx:id="btnBack" mnemonicParsing="false" onAction="#onBackButton" prefWidth="30" prefHeight="30" text="←" textAlignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0"/>
         <Label layoutY="80.0" text="First Name" AnchorPane.leftAnchor="230.0" />
         <Label layoutY="130.0" text="Last Name" AnchorPane.leftAnchor="230.0" />
         <Label layoutY="180.0" text="Current Password" AnchorPane.leftAnchor="230.0" />

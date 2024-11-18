@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
@@ -71,6 +72,11 @@ public class RequestsController implements Initializable {
 
     public void handleDeleteRequest(ActionEvent actionEvent) {
         if(tableIncoming.getSelectionModel().getSelectedItem() == null && tableOutgoing.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText(null);
+            alert.setContentText("Nothing selected.");
+            alert.showAndWait();
             return;
         }
 
@@ -88,31 +94,50 @@ public class RequestsController implements Initializable {
     }
 
     public void handleDeclineRequest(ActionEvent actionEvent) {
-        var selection = tableIncoming.getSelectionModel().getSelectedItem().toString();
+        var selection = tableIncoming.getSelectionModel().getSelectedItem();
 
-        long friendship_id = Long.parseLong(selection.split(" ")[1]);
+        if(selection != null){
+            long friendship_id = Long.parseLong(selection.split(" ")[1]);
 
-        Prietenie friendship = service.getFriend(friendship_id).orElse(null);
-        assert friendship != null;
-        friendship.setFriendRequest(FriendRequest.DECLINED);
+            Prietenie friendship = service.getFriend(friendship_id).orElse(null);
+            assert friendship != null;
+            friendship.setFriendRequest(FriendRequest.DECLINED);
 
-        service.modifyFriendship(friendship);
-        init();
+            service.modifyFriendship(friendship);
+            init();
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Delete error");
+            alert.setHeaderText(null);
+            alert.setContentText("Can't decline outgoing requests. Only delete them.");
+            alert.showAndWait();
+            return;
+        }
     }
 
     public void handleAcceptRequest(ActionEvent actionEvent) {
-        var selection = tableIncoming.getSelectionModel().getSelectedItem().toString();
+        var selection = tableIncoming.getSelectionModel().getSelectedItem();
 
-        long friendship_id = Long.parseLong(selection.split(" ")[1]);
+        if(selection != null){
+            long friendship_id = Long.parseLong(selection.split(" ")[1]);
 
-        Prietenie friendship = service.getFriend(friendship_id).orElse(null);
-        assert friendship != null;
-        if(!friendship.getFriendRequest().equals(FriendRequest.DECLINED)) {
-            friendship.setFriendRequest(FriendRequest.ACCEPTED);
+            Prietenie friendship = service.getFriend(friendship_id).orElse(null);
+            assert friendship != null;
+            if (!friendship.getFriendRequest().equals(FriendRequest.DECLINED)) {
+                friendship.setFriendRequest(FriendRequest.ACCEPTED);
+            }
+
+            service.modifyFriendship(friendship);
+            init();
+        }else{
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Delete error");
+            alert.setHeaderText(null);
+            alert.setContentText("Can't accept outgoing requests. Only delete them.");
+            alert.showAndWait();
+            return;
         }
-
-        service.modifyFriendship(friendship);
-        init();
     }
 
     public void handleBack(ActionEvent actionEvent) throws IOException {

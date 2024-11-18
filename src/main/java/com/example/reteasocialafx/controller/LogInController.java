@@ -5,16 +5,23 @@ import com.example.reteasocialafx.service.SocialService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class LogInController {
     @FXML
@@ -25,6 +32,8 @@ public class LogInController {
     public Button btnSignUp;
     @FXML
     public PasswordField password;
+    @FXML
+    public ImageView bannerImage;
 
     private SocialService socialService;
 
@@ -41,7 +50,12 @@ public class LogInController {
         Utilizator user = socialService.getUserByEmail(email.getText());
 
         if(user == null || !password.getText().equals(user.getPassword())) {
-            throw new IllegalArgumentException("");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Wrong email or password");
+            alert.showAndWait();
+            return;
         }
         else{
             FXMLLoader stageLoader = new FXMLLoader(getClass().getResource("/com/example/reteasocialafx/main-interface.fxml"));
@@ -49,6 +63,12 @@ public class LogInController {
 
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Successful");
+            alert.setHeaderText(null);
+            alert.setContentText("Log in successful");
+            alert.showAndWait();
 
             UserController controller = stageLoader.getController();
             controller.setSocialService(this.socialService);

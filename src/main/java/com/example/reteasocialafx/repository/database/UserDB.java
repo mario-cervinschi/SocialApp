@@ -10,17 +10,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class UserDB implements Repository<Long, Utilizator> {
 
     UtilizatorValidator utilizatorValidator;
-    private final Map<Long, Utilizator> entities;
 
     public UserDB(UtilizatorValidator utilizatorValidator) {
         this.utilizatorValidator = utilizatorValidator;
-        entities = new HashMap<>();
+    }
 
+    @Override
+    public Iterable<Utilizator> findAll() {
+        Map<Long, Utilizator> entities = new HashMap<>();
         try(var connection = DataBaseRun.connect()){
             String query = "SELECT * FROM users";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -35,16 +38,11 @@ public class UserDB implements Repository<Long, Utilizator> {
                 Utilizator user = new Utilizator(firstName, lastName, email, password);
                 user.setId(id);
 
-                entities.put(id, user);
+                entities.put(user.getId(), user);
             }
         }catch (SQLException e) {
             e.printStackTrace();
         }
-
-    }
-
-    @Override
-    public Iterable<Utilizator> findAll() {
         return entities.values();
     }
 
@@ -69,12 +67,19 @@ public class UserDB implements Repository<Long, Utilizator> {
             throw new RuntimeException(e);
         }
 
-        return Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
+        return Optional.of(entity);
     }
 
     @Override
     public Optional<Utilizator> delete(Long aLong) {
         String query = "DELETE FROM users WHERE user_id = ?";
+
+        Utilizator userToDelete = null;
+        for(var user : findAll()) {
+            if(Objects.equals(user.getId(), aLong)) {
+                userToDelete = user;
+            }
+        }
 
         try(var connection = DataBaseRun.connect()){
             PreparedStatement ps = connection.prepareStatement(query);
@@ -84,7 +89,7 @@ public class UserDB implements Repository<Long, Utilizator> {
             e.printStackTrace();
         }
 
-        return Optional.ofNullable(entities.remove(aLong));
+        return Optional.ofNullable(userToDelete);
     }
 
     @Override
@@ -92,10 +97,6 @@ public class UserDB implements Repository<Long, Utilizator> {
 
         if (entity.getId() == null) {
             throw new IllegalArgumentException("User ID cannot be null");
-        }
-
-        if (!entities.containsKey(entity.getId())) {
-            return Optional.empty();
         }
 
         String query = "UPDATE users SET firstname = ?, lastname = ?, email = ?, password = ? WHERE user_id = ?";
@@ -111,7 +112,6 @@ public class UserDB implements Repository<Long, Utilizator> {
             int rowsUpdated = ps.executeUpdate();
 
             if (rowsUpdated > 0) {
-                entities.put(entity.getId(), entity);
                 return Optional.of(entity);
             }
         } catch (SQLException e) {
@@ -123,9 +123,25 @@ public class UserDB implements Repository<Long, Utilizator> {
 
     @Override
     public Optional<Utilizator> findOne(Long aLong) {
-        if(aLong == null) {
-            throw new IllegalArgumentException("NULL ID");
+        Utilizator user = null;
+        try(var connection = DataBaseRun.connect()){
+            String query = "SELECT * FROM users WHERE user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setLong(1, aLong);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Long id = resultSet.getLong("user_id");
+                String firstName= resultSet.getString("firstname");
+                String lastName= resultSet.getString("lastname");
+                String password = resultSet.getString("password");
+                String email = resultSet.getString("email");
+
+                user = new Utilizator(firstName, lastName, email, password);
+                user.setId(id);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
-        return Optional.ofNullable(entities.get(aLong));
+        return Optional.ofNullable(user);
     }
 }

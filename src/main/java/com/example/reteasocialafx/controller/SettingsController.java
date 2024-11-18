@@ -8,7 +8,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -53,8 +55,19 @@ public class SettingsController {
     }
 
     public void onDeleteAccountButtonCLick(ActionEvent actionEvent) throws IOException {
-        socialService.removeUtilizator(currentUser.getId());
-        onLogOutButtonCLick(actionEvent);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Account");
+        alert.setHeaderText("Are you sure you want to delete your account?");
+        alert.setContentText("This action cannot be undone.");
+
+        var result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            socialService.removeUtilizator(currentUser.getId());
+            onLogOutButtonCLick(actionEvent);
+        } else {
+            alert.close();
+        }
     }
 
     public void onBackButtonCLick(ActionEvent actionEvent) throws IOException {

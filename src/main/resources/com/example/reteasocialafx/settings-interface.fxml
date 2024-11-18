@@ -8,10 +8,10 @@
             fx:controller="com.example.reteasocialafx.controller.SettingsController"
             prefHeight="400.0" prefWidth="600.0">
     <children>
+        <Button fx:id="goBack" mnemonicParsing="false" onAction="#onBackButtonCLick" prefWidth="30" prefHeight="30" text="←" textAlignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0"/>
         <Button layoutY="100.0" fx:id="btnLogOut" mnemonicParsing="false" onAction="#onLogOutButtonCLick" prefHeight="25.0" prefWidth="110.0" text="Log out" textAlignment="CENTER" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0"/>
         <Button layoutY="150.0" fx:id="btnModify" mnemonicParsing="false" onAction="#onModifyButtonCLick" prefHeight="25.0" prefWidth="110.0" text="Modify data" textAlignment="CENTER" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0"/>
         <Button layoutY="200.0" fx:id="deleteAccount" mnemonicParsing="false" onAction="#onDeleteAccountButtonCLick" prefHeight="20.0" prefWidth="110.0" text="Delete account" textAlignment="CENTER" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0"/>
-        <Button layoutY="250.0" fx:id="goBack" mnemonicParsing="false" onAction="#onBackButtonCLick" prefHeight="20.0" prefWidth="110.0" text="Go back" textAlignment="CENTER" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0"/>
     </children>
 
 </AnchorPane>
