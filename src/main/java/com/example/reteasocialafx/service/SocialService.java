@@ -2,31 +2,33 @@ package com.example.reteasocialafx.service;
 
 
 import com.example.reteasocialafx.domain.FriendRequest;
+import com.example.reteasocialafx.domain.Message;
 import com.example.reteasocialafx.domain.Prietenie;
 import com.example.reteasocialafx.domain.Utilizator;
 import com.example.reteasocialafx.repository.database.FriendshipDB;
+import com.example.reteasocialafx.repository.database.MessageDB;
 import com.example.reteasocialafx.repository.database.UserDB;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.StreamSupport;
 
 public class SocialService {
 
     private final UserDB repositoryUser;
     private final FriendshipDB repositoryFriendship;
+    private final MessageDB repositoryMessage;
 
-    public SocialService(UserDB repositoryUser, FriendshipDB repositoryFriendship) {
+    public SocialService(UserDB repositoryUser, FriendshipDB repositoryFriendship, MessageDB repositoryMessage) {
         this.repositoryUser = repositoryUser;
         this.repositoryFriendship = repositoryFriendship;
+        this.repositoryMessage = repositoryMessage;
     }
 
     public Iterable<Utilizator> getUsers() {
         return repositoryUser.findAll();
     }
 
-    public Optional<Utilizator> getUser(long id) {
+    public Optional<Utilizator> getUser(UUID id) {
         return repositoryUser.findOne(id);
     }
 
@@ -34,11 +36,17 @@ public class SocialService {
         return repositoryFriendship.findAll();
     }
 
-    public Optional<Prietenie> getFriend(long id) {
+    public Optional<Prietenie> getFriend(UUID id) {
         return repositoryFriendship.findOne(id);
     }
 
-    public ArrayList<Optional<Utilizator>> getFollowers(long userId) {
+    public Iterable<Message> getMessages(){return repositoryMessage.findAll();}
+
+    public Optional<Message> getMessage(UUID id){
+        return repositoryMessage.findOne(id);
+    }
+
+    public ArrayList<Optional<Utilizator>> getFollowers(UUID userId) {
         ArrayList<Optional<Utilizator>> friends = new ArrayList<>();
         for(var friendship : getFriendships()) {
             if(friendship.getIdUser2().equals(userId) && "ACCEPTED".equals(friendship.getFriendRequest().name())) {
@@ -48,7 +56,7 @@ public class SocialService {
         return friends;
     }
 
-    public ArrayList<Optional<Utilizator>> getFollowing(long userId) {
+    public ArrayList<Optional<Utilizator>> getFollowing(UUID userId) {
         ArrayList<Optional<Utilizator>> friends = new ArrayList<>();
         for(var friendship : getFriendships()) {
             if(friendship.getIdUser1().equals(userId) && "ACCEPTED".equals(friendship.getFriendRequest().name())) {
@@ -58,30 +66,11 @@ public class SocialService {
         return friends;
     }
 
-    private Long getNewUserID(){
-        Long id = 0L;
-        for(var u : getUsers()) {
-            id = u.getId();
-        }
-        id++;
-        return id;
-    }
-
-    private Long getNewFriendshipID(){
-        Long id = 0L;
-        for(var u : getFriendships()) {
-            id = u.getId();
-        }
-        id++;
-        return id;
-    }
-
     public void addUtilizator(Utilizator utilizator) {
-        utilizator.setId(getNewUserID());
         repositoryUser.save(utilizator);
     }
 
-    public void removeUtilizator(Long id){
+    public void removeUtilizator(UUID id){
 
         Optional<Utilizator> e = repositoryUser.findOne(id);
 
@@ -105,6 +94,25 @@ public class SocialService {
 
     }
 
+    public List<Message> getConversation(UUID fromId, UUID toId) {
+
+        return new ArrayList<>(repositoryMessage.getConversation(fromId, toId));
+    }
+
+    public Optional<Message> getLastMessage(UUID fromId, UUID toId) {
+        List<Message> conversation = getConversation(fromId, toId);
+        if (!conversation.isEmpty()) {
+            return Optional.of(conversation.get(conversation.size() - 1)); // Return the last message
+        }
+        return Optional.empty();
+    }
+
+    public void sendMessage(Message message){
+//        message.setId(getNewMessageID());
+        message.setReply(getLastMessage(message.getFrom(), message.getTo()).orElse(null));
+        repositoryMessage.save(message);
+    }
+
     public void addPrietenie(Prietenie prietenie) {
 
         var friendships = getFriendships();
@@ -124,19 +132,19 @@ public class SocialService {
             throw new IllegalArgumentException("Prietenie not found");
         }
 
-        prietenie.setId(getNewFriendshipID());
+//        prietenie.setId(getNewFriendshipID());
         repositoryFriendship.save(prietenie);
 
     }
 
-    public void deletePrietenieByID(Long id){
+    public void deletePrietenieByID(UUID id){
         repositoryFriendship.delete(id);
     }
 
-    public void deletePrietenie(Long id1, Long id2){
+    public void deletePrietenie(UUID id1, UUID id2){
 
         var friendships = getFriendships();
-        Long id = 0L;
+        UUID id = null;
         if(friendships != null){
             for(var u : friendships){
                 if(Objects.equals(u.getIdUser1(), id1) && Objects.equals(u.getIdUser2(), id2)){
@@ -144,7 +152,7 @@ public class SocialService {
                 }
             }
         }
-        if(id.equals(0L)){
+        if(id == null){
             throw new IllegalArgumentException("Prietenie nu exista");
         }
 
@@ -178,7 +186,7 @@ public class SocialService {
 
         if(friendships != null){
             for(var u : friendships){
-                if(u.getIdUser2().equals(utilizator.getId()) && ("PENDING".equals(u.getFriendRequest().name()) || "DECLINED".equals(u.getFriendRequest().name()))){
+                if(u.getIdUser2().equals(utilizator.getId()) && ("PENDING".equals(u.getFriendRequest().name()))){
                     incomingFriendships.add(u);
                 }
             }

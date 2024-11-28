@@ -66,6 +66,15 @@ public class UserController implements Initializable {
     public void initApp(Utilizator user) {
         this.mainUser = user;
 
+        var size = socialService.getIncomingFriendships(mainUser).size();
+        if(size > 0) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText(null);
+            alert.setContentText("You have " + size + " pending friend requests.");
+            alert.show();
+        }
+
         tableFollowers.getItems().clear();
         tableFollowing.getItems().clear();
 
@@ -194,6 +203,21 @@ public class UserController implements Initializable {
         stage.setScene(new Scene(root));
 
         RequestsController controller = stageLoader.getController();
+        controller.setSocialService(this.socialService);
+        controller.setCurrentUser(this.mainUser);
+        controller.init();
+
+        stage.show();
+    }
+
+    public void handleMessages(ActionEvent actionEvent) throws IOException {
+        FXMLLoader stageLoader = new FXMLLoader(getClass().getResource("/com/example/reteasocialafx/messages-interface.fxml"));
+        Parent root = stageLoader.load();
+
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+
+        MessagesController controller = stageLoader.getController();
         controller.setSocialService(this.socialService);
         controller.setCurrentUser(this.mainUser);
         controller.init();

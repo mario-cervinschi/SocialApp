@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.reteasocialafx.controller.MessagesController"
+      prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <!-- Main Content Area -->
+        <AnchorPane prefHeight="520.0" prefWidth="660.0">
+            <children>
+                <Button fx:id="goBack" mnemonicParsing="false" onAction="#onBackButtonCLick" prefWidth="30" prefHeight="30" text="←" textAlignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0"/>
+                <SplitPane fx:id="splitPane" orientation="HORIZONTAL" prefHeight="329.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50">
+                    <items>
+                        <!-- Left Section (Users List + Search Box) -->
+                        <VBox alignment="TOP_CENTER" spacing="10.0">
+                            <children>
+                                <TextField fx:id="searchBox" promptText="Search users..." />
+                                <ListView fx:id="userListView" />
+                            </children>
+                        </VBox>
+
+                        <!-- Right Section (Messages) -->
+                        <VBox alignment="TOP_CENTER" spacing="10.0">
+                            <children>
+                                <ListView fx:id="currentConversationListView" />
+                            </children>
+                        </VBox>
+                    </items>
+                </SplitPane>
+            </children>
+        </AnchorPane>
+
+        <!-- Bottom Section (Message Input and Send Button) -->
+        <AnchorPane>
+            <children>
+                <!-- Message Input -->
+                <HBox spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                    <TextField fx:id="messageInput" promptText="Type your message here..." />
+                    <Button fx:id="sendButton" text="Send" onAction="#handleSendMessage" />
+                </HBox>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

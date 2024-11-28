@@ -50,7 +50,7 @@ public class ModifyController {
     public Button btnModify;
 
     public void onModifyButtonClick(ActionEvent actionEvent) throws IOException {
-        if(!firstName.getText().isEmpty() || !lastName.getText().isEmpty()) {
+        if(!firstName.getText().isEmpty() && !lastName.getText().isEmpty()) {
             if(currentPassword.getText().equals(utilizator.getPassword())) {
                 if(newPassword.getText().equals(confirmNewPassword.getText())) {
                     Utilizator newUser = new Utilizator(firstName.getText(), lastName.getText(), utilizator.getEmail(), newPassword.getText());

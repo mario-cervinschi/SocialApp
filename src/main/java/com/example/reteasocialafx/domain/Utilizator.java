@@ -2,7 +2,7 @@ package com.example.reteasocialafx.domain;
 
 import java.util.*;
 
-public class Utilizator extends Entity<Long>{
+public class Utilizator extends Entity<UUID>{
     private String firstName;
     private String lastName;
     private String email;
@@ -12,6 +12,7 @@ public class Utilizator extends Entity<Long>{
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.setId(UUID.randomUUID());
     }
 
     public Utilizator(String firstName, String lastName, String email, String password) {
@@ -19,6 +20,7 @@ public class Utilizator extends Entity<Long>{
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.setId(UUID.randomUUID());
     }
 
     public String getEmail() {
@@ -55,10 +57,7 @@ public class Utilizator extends Entity<Long>{
 
     @Override
     public String toString() {
-        return "Utilizator{" +
-                "fName='" + firstName + '\'' +
-                ", lName='" + lastName + '\'' +
-                '}';
+        return firstName + " " + lastName;
     }
 
     @Override

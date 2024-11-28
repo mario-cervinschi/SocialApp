@@ -8,12 +8,9 @@ import com.example.reteasocialafx.service.DataBaseRun;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
-public class UserDB implements Repository<Long, Utilizator> {
+public class UserDB implements Repository<UUID, Utilizator> {
 
     UtilizatorValidator utilizatorValidator;
 
@@ -23,13 +20,13 @@ public class UserDB implements Repository<Long, Utilizator> {
 
     @Override
     public Iterable<Utilizator> findAll() {
-        Map<Long, Utilizator> entities = new HashMap<>();
+        Map<UUID, Utilizator> entities = new HashMap<>();
         try(var connection = DataBaseRun.connect()){
             String query = "SELECT * FROM users";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Long id = resultSet.getLong("user_id");
+                UUID id = UUID.fromString(resultSet.getString("user_id"));
                 String firstName= resultSet.getString("firstname");
                 String lastName= resultSet.getString("lastname");
                 String password = resultSet.getString("password");
@@ -58,7 +55,7 @@ public class UserDB implements Repository<Long, Utilizator> {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, entity.getLastName());
             ps.setString(2, entity.getFirstName());
-            ps.setLong(3, entity.getId());
+            ps.setString(3, entity.getId().toString());
             ps.setString(4, entity.getEmail());
             ps.setString(5, entity.getPassword());
             ps.executeUpdate();
@@ -71,7 +68,7 @@ public class UserDB implements Repository<Long, Utilizator> {
     }
 
     @Override
-    public Optional<Utilizator> delete(Long aLong) {
+    public Optional<Utilizator> delete(UUID aLong) {
         String query = "DELETE FROM users WHERE user_id = ?";
 
         Utilizator userToDelete = null;
@@ -83,7 +80,7 @@ public class UserDB implements Repository<Long, Utilizator> {
 
         try(var connection = DataBaseRun.connect()){
             PreparedStatement ps = connection.prepareStatement(query);
-            ps.setLong(1, aLong);
+            ps.setString(1, aLong.toString());
             ps.executeUpdate();
         }catch (SQLException e) {
             e.printStackTrace();
@@ -107,7 +104,7 @@ public class UserDB implements Repository<Long, Utilizator> {
             ps.setString(2, entity.getLastName());
             ps.setString(3, entity.getEmail());
             ps.setString(4, entity.getPassword());
-            ps.setLong(5, entity.getId());
+            ps.setString(5, entity.getId().toString());
 
             int rowsUpdated = ps.executeUpdate();
 
@@ -122,15 +119,15 @@ public class UserDB implements Repository<Long, Utilizator> {
     }
 
     @Override
-    public Optional<Utilizator> findOne(Long aLong) {
+    public Optional<Utilizator> findOne(UUID aLong) {
         Utilizator user = null;
         try(var connection = DataBaseRun.connect()){
             String query = "SELECT * FROM users WHERE user_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setLong(1, aLong);
+            preparedStatement.setString(1, aLong.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                Long id = resultSet.getLong("user_id");
+                UUID id = UUID.fromString(resultSet.getString("user_id"));
                 String firstName= resultSet.getString("firstname");
                 String lastName= resultSet.getString("lastname");
                 String password = resultSet.getString("password");

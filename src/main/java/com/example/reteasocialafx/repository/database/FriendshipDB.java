@@ -9,12 +9,9 @@ import com.example.reteasocialafx.service.DataBaseRun;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
-public class FriendshipDB implements Repository<Long, Prietenie> {
+public class FriendshipDB implements Repository<UUID, Prietenie> {
 
     private PrietenieValidator prietenieValidator;
 
@@ -23,17 +20,17 @@ public class FriendshipDB implements Repository<Long, Prietenie> {
     }
 
     @Override
-    public Optional<Prietenie> findOne(Long aLong) {
+    public Optional<Prietenie> findOne(UUID aLong) {
         Prietenie friendship = null;
         try(var connection = DataBaseRun.connect()){
             String query = "SELECT * FROM friendship where id_friendship = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setLong(1, aLong);
+            preparedStatement.setString(1, aLong.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                Long id = resultSet.getLong("id_friendship");
-                Long id_user1 = resultSet.getLong("id_user1");
-                Long id_user2 = resultSet.getLong("id_user2");
+                UUID id = UUID.fromString(resultSet.getString("id_friendship"));
+                UUID id_user1 = UUID.fromString(resultSet.getString("id_user1"));
+                UUID id_user2 = UUID.fromString(resultSet.getString("id_user2"));
                 Timestamp timestamp = resultSet.getTimestamp("date");
                 String status = resultSet.getString("status");
 
@@ -50,15 +47,15 @@ public class FriendshipDB implements Repository<Long, Prietenie> {
 
     @Override
     public Iterable<Prietenie> findAll() {
-        Map<Long, Prietenie> entities = new HashMap<>();
+        Map<UUID, Prietenie> entities = new HashMap<>();
         try(var connection = DataBaseRun.connect()){
             String query = "SELECT * FROM friendship";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Long id = resultSet.getLong("id_friendship");
-                Long id_user1 = resultSet.getLong("id_user1");
-                Long id_user2 = resultSet.getLong("id_user2");
+                UUID id = UUID.fromString(resultSet.getString("id_friendship"));
+                UUID id_user1 = UUID.fromString(resultSet.getString("id_user1"));
+                UUID id_user2 = UUID.fromString(resultSet.getString("id_user2"));
                 Timestamp timestamp = resultSet.getTimestamp("date");
                 String status = resultSet.getString("status");
 
@@ -66,7 +63,7 @@ public class FriendshipDB implements Repository<Long, Prietenie> {
 
                 Prietenie friendship = new Prietenie(id_user1, id_user2, FriendRequest.valueOf(status));
                 friendship.setId(id);
-
+                friendship.setDate(date);
                 entities.put(friendship.getId(), friendship);
             }
         }catch (SQLException e) {
@@ -84,9 +81,9 @@ public class FriendshipDB implements Repository<Long, Prietenie> {
 
         try(var connection = DataBaseRun.connect()){
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setLong(1, entity.getId());
-            preparedStatement.setLong(2, entity.getIdUser1());
-            preparedStatement.setLong(3, entity.getIdUser2());
+            preparedStatement.setString(1, entity.getId().toString());
+            preparedStatement.setString(2, entity.getIdUser1().toString());
+            preparedStatement.setString(3, entity.getIdUser2().toString());
             preparedStatement.setTimestamp(4, Timestamp.valueOf(entity.getDate()));
             preparedStatement.setString(5, entity.getFriendRequest().name());
             preparedStatement.execute();
@@ -99,7 +96,7 @@ public class FriendshipDB implements Repository<Long, Prietenie> {
     }
 
     @Override
-    public Optional<Prietenie> delete(Long aLong) {
+    public Optional<Prietenie> delete(UUID aLong) {
         String query = "DELETE FROM friendship WHERE id_friendship = ?";
 
         Prietenie friendshipToDelete = null;
@@ -111,7 +108,7 @@ public class FriendshipDB implements Repository<Long, Prietenie> {
 
         try(var connection = DataBaseRun.connect()){
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setLong(1, aLong);
+            preparedStatement.setString(1, aLong.toString());
             preparedStatement.executeUpdate();
 
         }catch (SQLException e) {
@@ -131,11 +128,11 @@ public class FriendshipDB implements Repository<Long, Prietenie> {
 
         try (var connection = DataBaseRun.connect()) {
             PreparedStatement ps = connection.prepareStatement(query);
-            ps.setLong(1, entity.getIdUser1());
-            ps.setLong(2, entity.getIdUser2());
+            ps.setString(1, entity.getIdUser1().toString());
+            ps.setString(2, entity.getIdUser2().toString());
             ps.setTimestamp(3, Timestamp.valueOf(entity.getDate()));
             ps.setString(4, entity.getFriendRequest().name());
-            ps.setLong(5, entity.getId());
+            ps.setString(5, entity.getId().toString());
 
             int rowsUpdated = ps.executeUpdate();
 

@@ -47,34 +47,38 @@ public class LogInController {
 
     @FXML
     public void onLogInButtonCLick(ActionEvent actionEvent) throws IOException {
-        Utilizator user = socialService.getUserByEmail(email.getText());
+        try {
+            Utilizator user = socialService.getUserByEmail(email.getText());
 
-        if(user == null || !password.getText().equals(user.getPassword())) {
+            if(user == null || !password.getText().equals(user.getPassword())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Wrong email or password");
+                alert.showAndWait();
+                return;
+            }
+            else{
+                FXMLLoader stageLoader = new FXMLLoader(getClass().getResource("/com/example/reteasocialafx/main-interface.fxml"));
+                Parent root = stageLoader.load();
+
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
+
+                UserController controller = stageLoader.getController();
+                controller.setSocialService(this.socialService);
+                controller.initApp(user);
+
+                stage.show();
+            }
+        }
+        catch(Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
-            alert.setContentText("Wrong email or password");
+            alert.setContentText("Blank email");
             alert.showAndWait();
             return;
-        }
-        else{
-            FXMLLoader stageLoader = new FXMLLoader(getClass().getResource("/com/example/reteasocialafx/main-interface.fxml"));
-            Parent root = stageLoader.load();
-
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Successful");
-            alert.setHeaderText(null);
-            alert.setContentText("Log in successful");
-            alert.showAndWait();
-
-            UserController controller = stageLoader.getController();
-            controller.setSocialService(this.socialService);
-            controller.initApp(user);
-
-            stage.show();
         }
     }
 

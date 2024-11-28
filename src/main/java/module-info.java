@@ -3,6 +3,7 @@ module com.example.reteasocialafx {
     requires javafx.fxml;
     requires java.sql;
     requires jdk.jshell;
+    requires java.desktop;
 
 
     opens com.example.reteasocialafx to javafx.fxml;

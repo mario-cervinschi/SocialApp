@@ -14,21 +14,23 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class RequestsController implements Initializable {
 
-    private final ObservableList<String> incomingRequests = FXCollections.observableArrayList();
-    private final ObservableList<String> outgoingRequests = FXCollections.observableArrayList();
+    private final ObservableList<Prietenie> incomingRequests = FXCollections.observableArrayList();
+    private final ObservableList<Prietenie> outgoingRequests = FXCollections.observableArrayList();
     @FXML
-    public ListView<String> tableIncoming;
+    public ListView<Prietenie> tableIncoming = new ListView<>();
     @FXML
-    public ListView<String> tableOutgoing;
+    public ListView<Prietenie> tableOutgoing = new ListView<>();
 
     private SocialService service;
     private Utilizator currentUser;
@@ -56,12 +58,39 @@ public class RequestsController implements Initializable {
         List<Prietenie> incoming = service.getIncomingFriendships(currentUser);
         List<Prietenie> outgoing = service.getOutgoingFriendships(currentUser);
 
-        for(var u : incoming) {
-            incomingRequests.add("ID: " + u.getId().toString() + " " + "From:" + " " + Objects.requireNonNull(service.getUser(u.getIdUser1()).orElse(null)).getFirstName() + " " + Objects.requireNonNull(service.getUser(u.getIdUser1()).orElse(null)).getLastName() + " " + "To: YOU" + " " + "Date:" + " " + u.getDate().toString() + " " + u.getFriendRequest().toString());
-        }
-        for(var u : outgoing) {
-            outgoingRequests.add("ID: " + u.getId().toString() + " " + "From:" + " " + "YOU" + " " + "To:" + " " + Objects.requireNonNull(service.getUser(u.getIdUser2()).orElse(null)).getFirstName() + " " + Objects.requireNonNull(service.getUser(u.getIdUser2()).orElse(null)).getLastName() + " " + "Date:" + " " + u.getDate().toString() + " " + u.getFriendRequest().toString());
-        }
+        incomingRequests.addAll(incoming);
+        outgoingRequests.addAll(outgoing);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        tableIncoming.setCellFactory(listView -> new ListCell<Prietenie>() {
+            @Override
+            protected void updateItem(Prietenie prietenie, boolean empty) {
+                super.updateItem(prietenie, empty);
+                if (empty || prietenie == null) {
+                    setText(null);
+                } else {
+                    String from = service.getUser(prietenie.getIdUser1()).get().toString();
+                    String date = prietenie.getDate().format(formatter);
+                    setText("Request from: " + from + ". Date sent: " + date);
+                }
+            }
+        });
+
+        tableOutgoing.setCellFactory(listView -> new ListCell<Prietenie>() {
+            @Override
+            protected void updateItem(Prietenie prietenie, boolean empty) {
+                super.updateItem(prietenie, empty);
+                if (empty || prietenie == null) {
+                    setText(null);
+                } else {
+                    String to = service.getUser(prietenie.getIdUser2()).get().toString();
+                    String date = prietenie.getDate().format(formatter);
+                    setText("Sent to: " + to + " | Date sent: " + date + " | Status: " + prietenie.getFriendRequest().toString());
+                }
+            }
+        });
+
     }
 
     @Override
@@ -81,15 +110,19 @@ public class RequestsController implements Initializable {
         }
 
         if(tableIncoming.getSelectionModel().getSelectedItem() != null) {
-            String selection = tableIncoming.getSelectionModel().getSelectedItem().toString();
-            long friendshipID = Long.parseLong(selection.split(" ")[1]);
+            Prietenie selection = tableIncoming.getSelectionModel().getSelectedItem();
+            UUID friendshipID = selection.getId();
             service.deletePrietenieByID(friendshipID);
-            init();
+            incomingRequests.remove(selection);
+            tableIncoming.refresh();
+            //init();
         }else {
-            String selection = tableOutgoing.getSelectionModel().getSelectedItem().toString();
-            long friendshipID = Long.parseLong(selection.split(" ")[1]);
+            Prietenie selection = tableOutgoing.getSelectionModel().getSelectedItem();
+            UUID friendshipID = selection.getId();
             service.deletePrietenieByID(friendshipID);
-            init();
+            outgoingRequests.remove(selection);
+            //tableOutgoing.refresh();
+            //init();
         }
     }
 
@@ -97,14 +130,16 @@ public class RequestsController implements Initializable {
         var selection = tableIncoming.getSelectionModel().getSelectedItem();
 
         if(selection != null){
-            long friendship_id = Long.parseLong(selection.split(" ")[1]);
+            UUID friendship_id = selection.getId();
 
             Prietenie friendship = service.getFriend(friendship_id).orElse(null);
             assert friendship != null;
             friendship.setFriendRequest(FriendRequest.DECLINED);
-
+            incomingRequests.remove(selection);
             service.modifyFriendship(friendship);
-            init();
+            //incomingRequests.add(service.modifyFriendship(friendship));
+            //tableIncoming.refresh();
+            //init();
         }
         else{
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -120,16 +155,17 @@ public class RequestsController implements Initializable {
         var selection = tableIncoming.getSelectionModel().getSelectedItem();
 
         if(selection != null){
-            long friendship_id = Long.parseLong(selection.split(" ")[1]);
+            UUID friendship_id = selection.getId();
 
             Prietenie friendship = service.getFriend(friendship_id).orElse(null);
-            assert friendship != null;
             if (!friendship.getFriendRequest().equals(FriendRequest.DECLINED)) {
                 friendship.setFriendRequest(FriendRequest.ACCEPTED);
             }
 
             service.modifyFriendship(friendship);
-            init();
+            incomingRequests.remove(selection);
+            // tableIncoming.refresh();
+            //init();
         }else{
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Delete error");

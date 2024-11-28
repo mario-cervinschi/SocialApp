@@ -4,6 +4,7 @@ import com.example.reteasocialafx.controller.LogInController;
 import com.example.reteasocialafx.domain.validators.PrietenieValidator;
 import com.example.reteasocialafx.domain.validators.UtilizatorValidator;
 import com.example.reteasocialafx.repository.database.FriendshipDB;
+import com.example.reteasocialafx.repository.database.MessageDB;
 import com.example.reteasocialafx.repository.database.UserDB;
 import com.example.reteasocialafx.service.SocialService;
 import javafx.application.Application;
@@ -37,7 +38,9 @@ public class MainApp extends Application {
         repoUser = new UserDB(new UtilizatorValidator());
         FriendshipDB repoFriend;
         repoFriend = new FriendshipDB(new PrietenieValidator(repoUser));
-        this.service = new SocialService(repoUser, repoFriend);
+        MessageDB repoMessage;
+        repoMessage = new MessageDB(repoUser);
+        this.service = new SocialService(repoUser, repoFriend, repoMessage);
 
         initView(stage);
         stage.show();

@@ -1,13 +1,14 @@
 package com.example.reteasocialafx.domain;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-public class Prietenie extends Entity<Long> {
+public class Prietenie extends Entity<UUID> {
 
     LocalDateTime date;
 
-    Long idUser1;
-    Long idUser2;
+    UUID idUser1;
+    UUID idUser2;
 
     FriendRequest friendRequest;
 
@@ -18,30 +19,35 @@ public class Prietenie extends Entity<Long> {
      * @param idUser2
      * The id of the second user
      */
-    public Prietenie(Long idUser1, Long idUser2) {
+    public Prietenie(UUID idUser1, UUID idUser2) {
         this.idUser1 = idUser1;
         this.idUser2 = idUser2;
-
+        this.setId(UUID.randomUUID());
         this.date = LocalDateTime.now();
     }
 
-    public Prietenie(Long idUser1, Long idUser2, FriendRequest friendRequest) {
+    public Prietenie(UUID idUser1, UUID idUser2, FriendRequest friendRequest) {
         this.idUser1 = idUser1;
         this.idUser2 = idUser2;
         this.friendRequest = friendRequest;
         this.date = LocalDateTime.now();
+        this.setId(UUID.randomUUID());
     }
 
-    public Long getIdUser1() {
+    public UUID getIdUser1() {
         return idUser1;
     }
 
-    public Long getIdUser2() {
+    public UUID getIdUser2() {
         return idUser2;
     }
 
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public FriendRequest getFriendRequest() {
