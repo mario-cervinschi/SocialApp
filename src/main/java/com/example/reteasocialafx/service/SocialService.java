@@ -8,6 +8,8 @@ import com.example.reteasocialafx.domain.Utilizator;
 import com.example.reteasocialafx.repository.database.FriendshipDB;
 import com.example.reteasocialafx.repository.database.MessageDB;
 import com.example.reteasocialafx.repository.database.UserDB;
+import com.example.reteasocialafx.util.paging.Page;
+import com.example.reteasocialafx.util.paging.Pageable;
 
 import java.util.*;
 import java.util.stream.StreamSupport;
@@ -108,8 +110,6 @@ public class SocialService {
     }
 
     public void sendMessage(Message message){
-//        message.setId(getNewMessageID());
-        message.setReply(getLastMessage(message.getFrom(), message.getTo()).orElse(null));
         repositoryMessage.save(message);
     }
 
@@ -132,7 +132,6 @@ public class SocialService {
             throw new IllegalArgumentException("Prietenie not found");
         }
 
-//        prietenie.setId(getNewFriendshipID());
         repositoryFriendship.save(prietenie);
 
     }
@@ -207,6 +206,13 @@ public class SocialService {
             }
         }
         return outgoingFriendships;
+    }
+
+    public Page<Prietenie> findAllFollowingOnPage(Pageable pageable, String uid) {
+        return repositoryFriendship.findAllFollowingOnPage(pageable, uid);
+    }
+    public Page<Prietenie> findAllFollowersOnPage(Pageable pageable, String uid) {
+        return repositoryFriendship.findAllFollowersOnPage(pageable, uid);
     }
 
 }

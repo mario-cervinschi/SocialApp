@@ -8,7 +8,7 @@ public class DataBaseRun {
     public static Connection connect() throws SQLException {
 
         try{
-            var jdbcURL = "jdbc:postgresql://localhost:6000/postgres";
+            var jdbcURL = "jdbc:postgresql://localhost:5432/postgres";
             var jdbcUser = "postgres";
             var jdbcPass = "1234";
 

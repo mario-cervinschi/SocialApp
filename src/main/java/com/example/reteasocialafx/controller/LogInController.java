@@ -73,6 +73,7 @@ public class LogInController {
             }
         }
         catch(Exception e) {
+            System.out.printf(e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);

@@ -4,14 +4,16 @@ package com.example.reteasocialafx.repository.database;
 import com.example.reteasocialafx.domain.FriendRequest;
 import com.example.reteasocialafx.domain.Prietenie;
 import com.example.reteasocialafx.domain.validators.PrietenieValidator;
-import com.example.reteasocialafx.repository.Repository;
+import com.example.reteasocialafx.repository.FriendshipRepository;
 import com.example.reteasocialafx.service.DataBaseRun;
+import com.example.reteasocialafx.util.paging.Page;
+import com.example.reteasocialafx.util.paging.Pageable;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class FriendshipDB implements Repository<UUID, Prietenie> {
+public class FriendshipDB implements FriendshipRepository {
 
     private PrietenieValidator prietenieValidator;
 
@@ -144,5 +146,98 @@ public class FriendshipDB implements Repository<UUID, Prietenie> {
         }
 
         return Optional.empty();
+    }
+
+    private int count(Connection connection, String userID, String type) throws SQLException {
+        String sql = "select count(*) as count from friendship";
+        if(type.equals("Following")){
+            sql += " where id_user1 = ? AND status = 'ACCEPTED'";
+        }
+        else{
+            sql += " where id_user2 = ? AND status = 'ACCEPTED'";
+        }
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, userID);
+            try (ResultSet result = statement.executeQuery()) {
+                int totalNumberOfMovies = 0;
+                if (result.next()) {
+                    totalNumberOfMovies = result.getInt("count");
+                }
+                return totalNumberOfMovies;
+            }
+        }
+    }
+
+    private List<Prietenie> findAllOnPage(Connection connection, Pageable pageable, String userID, String type) throws SQLException {
+        List<Prietenie> friendsOnPage = new ArrayList<>();
+        // Using StringBuilder rather than "+" operator for concatenating Strings is more performant
+        // since Strings are immutable, so every operation applied on a String will create a new String
+        String sql = "select * from friendship";
+        if(type.equals("Following")){
+            sql += " where id_user1 = ? AND status = 'ACCEPTED'";
+        }
+        else{
+            sql += " where id_user2 = ? AND status = 'ACCEPTED'";
+        }
+        sql += " limit ? offset ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            int paramIndex = 0;
+            statement.setString(++paramIndex, userID);
+            statement.setInt(++paramIndex, pageable.getPageSize());
+
+            statement.setInt(++paramIndex, pageable.getPageSize() * pageable.getPageNumber());
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    UUID id = UUID.fromString(resultSet.getString("id_friendship"));
+                    UUID id_user1 = UUID.fromString(resultSet.getString("id_user1"));
+                    UUID id_user2 = UUID.fromString(resultSet.getString("id_user2"));
+                    Timestamp timestamp = resultSet.getTimestamp("date");
+                    String status = resultSet.getString("status");
+
+                    LocalDateTime date = timestamp != null ? timestamp.toLocalDateTime() : null;
+
+                    Prietenie friendship = new Prietenie(id_user1, id_user2, FriendRequest.valueOf(status));
+                    friendship.setId(id);
+                    friendship.setDate(date);
+                    friendsOnPage.add(friendship);
+                }
+            }
+        }
+        return friendsOnPage;
+    }
+
+
+    @Override
+    public Page<Prietenie> findAllFollowingOnPage(Pageable pageable, String userID) {
+        try (Connection connection = DataBaseRun.connect()) {
+            int totalNumberOfFriendships = count(connection, userID, "Following");
+            List<Prietenie> friendsOnPage;
+            if (totalNumberOfFriendships > 0) {
+                friendsOnPage = findAllOnPage(connection, pageable, userID, "Following");
+            } else {
+                friendsOnPage = new ArrayList<>();
+            }
+            return new Page<>(friendsOnPage, totalNumberOfFriendships);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Page<Prietenie> findAllFollowersOnPage(Pageable pageable, String userID) {
+        try (Connection connection = DataBaseRun.connect()) {
+            int totalNumberOfFriendships = count(connection, userID, "Followers");
+            List<Prietenie> friendsOnPage;
+            if (totalNumberOfFriendships > 0) {
+                friendsOnPage = findAllOnPage(connection, pageable, userID, "Followers");
+            } else {
+                friendsOnPage = new ArrayList<>();
+            }
+            return new Page<>(friendsOnPage, totalNumberOfFriendships);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

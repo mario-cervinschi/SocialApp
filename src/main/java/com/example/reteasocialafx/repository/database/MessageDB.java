@@ -1,10 +1,7 @@
 package com.example.reteasocialafx.repository.database;
 
-import com.example.reteasocialafx.domain.FriendRequest;
 import com.example.reteasocialafx.domain.Message;
-import com.example.reteasocialafx.domain.Prietenie;
 import com.example.reteasocialafx.domain.Utilizator;
-import com.example.reteasocialafx.domain.validators.UtilizatorValidator;
 import com.example.reteasocialafx.repository.Repository;
 import com.example.reteasocialafx.service.DataBaseRun;
 
